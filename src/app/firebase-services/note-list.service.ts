@@ -1,6 +1,6 @@
 import { Injectable, inject  } from '@angular/core';
 import { Note } from '../interfaces/note.interface'
-import { Firestore, collectionData, collection, doc, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, collectionData, collection, doc, onSnapshot, addDoc,updateDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -18,6 +18,41 @@ export class NoteListService {
   constructor() {
     this.unsubNotes = this.subNotesList();
     this.unsubTrash = this.subTrashList();
+  }
+
+  async updateNote(note: Note) {
+    if (note.id) {
+      let docRef = this.getSingleDocRef(this.getColIdFromNote(note), note.id);
+      await updateDoc(docRef, this.getCleanJson(note)).catch(
+        (err) => { console.log(err); }
+      );
+      
+    }
+  }
+
+  getCleanJson(note:Note):{} {
+    return {
+      type: note.type,
+      title: note.title,
+      content: note.content,
+      marked: note.marked,
+    }
+  }
+
+  getColIdFromNote(note:Note) {
+    if (note.type == 'note') {
+      return 'notes';
+    } else {
+      return 'trash';
+    }
+  }
+
+  async addNote(item: Note) {
+    await addDoc(this.getNotesRef(), item).catch(
+      (err) => { console.error(err) }
+    ).then(
+      (docRef) => { console.log('Document written with ID: ', docRef?.id); }
+    );
   }
 
   ngonDestroy() {
@@ -39,6 +74,7 @@ export class NoteListService {
     return onSnapshot(this.getNotesRef(), (list) => {
       this.normalNotes = [];
       list.forEach(element => {
+        console.log(this.setNoteObject(element.data(), element.id));
         this.normalNotes.push(this.setNoteObject(element.data(), element.id));
       });
     });
@@ -48,6 +84,7 @@ export class NoteListService {
     return onSnapshot(this.getTrashRef(), (list) => {
       this.trashNotes = [];
       list.forEach(element => {
+        console.log(this.setNoteObject(element.data(), element.id));
         this.trashNotes.push(this.setNoteObject(element.data(), element.id));
       });
     });
