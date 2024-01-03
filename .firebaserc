@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "danotes-75f40": {
+      "hosting": {
+        "da-keep": [
+          "danotes-75f40"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "danotes-75f40"
+  }
+}
