@@ -19,7 +19,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
     FooterComponent,
     NoteListComponent,
     NoteComponent,
-    AddNoteDialogComponent
+    AddNoteDialogComponent,
   ],
   imports: [
     BrowserModule,
