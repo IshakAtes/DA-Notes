@@ -24,6 +24,7 @@ export class NoteListService {
   }
 
   async deleteNote(colId: 'notes' | 'trash', docId: string) {
+    console.log('trash', this.trashNotes);
     await deleteDoc(this.getSingleDocRef(colId, docId)).catch(
       (err) => { console.log(err) }
     )
@@ -58,7 +59,9 @@ export class NoteListService {
   }
 
   async addNote(item:Note , colId: 'notes' | 'trash'){
-    if(colId){
+    if(colId == 'trash'){
+      await addDoc(this.getTrashRef(), item)
+    } else {
       await addDoc(this.getNotesRef(), item).catch(
         (err) => {console.error(err)}
       ).then(
@@ -98,7 +101,6 @@ export class NoteListService {
     return onSnapshot(q, (list) => {
       this.markedNotes = [];
       list.forEach(element => {
-        console.log(this.markedNotes);
         this.markedNotes.push(this.setNoteObject(element.data(), element.id));
       });
     });
