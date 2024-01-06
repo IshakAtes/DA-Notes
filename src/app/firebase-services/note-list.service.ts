@@ -57,6 +57,8 @@ export class NoteListService {
   }
 
   async addNote(item:Note , colId: 'notes' | 'trash'){
+    console.log('hh', colId, item);
+    
     if(colId){
       await addDoc(this.getNotesRef(), item).catch(
         (err) => {console.error(err)}
