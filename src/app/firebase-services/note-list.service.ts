@@ -24,7 +24,6 @@ export class NoteListService {
   }
 
   async deleteNote(colId: 'notes' | 'trash', docId: string) {
-    console.log('trash', this.trashNotes);
     await deleteDoc(this.getSingleDocRef(colId, docId)).catch(
       (err) => { console.log(err) }
     )
@@ -33,7 +32,6 @@ export class NoteListService {
   async updateNote(note: Note) {
     if (note.id) {
       let docRef = this.getSingleDocRef(this.getColIdFromNote(note), note.id);
-      console.log(note.type);
       await updateDoc(docRef, this.getCleanJson(note)).catch(
         (err) => { console.log(err); }
       );
@@ -90,7 +88,6 @@ export class NoteListService {
     return onSnapshot(this.getNotesRef(), (list) => {
       this.normalNotes = [];
       list.forEach(element => {
-        console.log(this.setNoteObject(element.data(), element.id));
         this.normalNotes.push(this.setNoteObject(element.data(), element.id));
       });
     });
@@ -110,7 +107,6 @@ export class NoteListService {
     return onSnapshot(this.getTrashRef(), (list) => {
       this.trashNotes = [];
       list.forEach(element => {
-        console.log(this.setNoteObject(element.data(), element.id));
         this.trashNotes.push(this.setNoteObject(element.data(), element.id));
       });
     });
