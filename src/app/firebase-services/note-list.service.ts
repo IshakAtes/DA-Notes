@@ -1,6 +1,6 @@
 import { Injectable, inject  } from '@angular/core';
 import { Note } from '../interfaces/note.interface'
-import { Firestore, collectionData, collection, doc, onSnapshot, addDoc,updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collectionData, collection, query, where, doc, onSnapshot, addDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -32,6 +32,7 @@ export class NoteListService {
   async updateNote(note: Note) {
     if (note.id) {
       let docRef = this.getSingleDocRef(this.getColIdFromNote(note), note.id);
+      console.log(note.type);
       await updateDoc(docRef, this.getCleanJson(note)).catch(
         (err) => { console.log(err); }
       );
@@ -57,8 +58,6 @@ export class NoteListService {
   }
 
   async addNote(item:Note , colId: 'notes' | 'trash'){
-    console.log('hh', colId, item);
-    
     if(colId){
       await addDoc(this.getNotesRef(), item).catch(
         (err) => {console.error(err)}
@@ -95,9 +94,11 @@ export class NoteListService {
   }
 
   subMarkedNotesList(){
-    return onSnapshot(this.getNotesRef(), (list) => {
+    const q = query(this.getNotesRef(), where("marked", "==", true));
+    return onSnapshot(q, (list) => {
       this.markedNotes = [];
       list.forEach(element => {
+        console.log(this.markedNotes);
         this.markedNotes.push(this.setNoteObject(element.data(), element.id));
       });
     });

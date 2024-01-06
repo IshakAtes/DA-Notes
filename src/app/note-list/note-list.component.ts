@@ -15,13 +15,16 @@ export class NoteListComponent {
   constructor(public noteService: NoteListService) {}
 
   getList(): Note[] | any {
+    console.log(this.status);
     if (this.status == 'notes') {
       if (this.favFilter == 'all') {
         return this.noteService.normalNotes;
       } else {
-        this.noteService.markedNotes;
+        console.log(this.noteService.markedNotes);
+        return this.noteService.markedNotes;
       }
     } else {
+      console.log(this.noteService.trashNotes);
       return this.noteService.trashNotes;
     }
   }
