@@ -44,6 +44,15 @@ export class NoteComponent {
     }
   }
 
+
+  /**
+   * 
+   * 
+   * 
+   * 
+   * 
+   * Frage Typisierung
+   */
   moveToNotes(){
     this.note.type = 'note';
     let docId: string | any = this.note.id;

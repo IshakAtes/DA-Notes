@@ -14,6 +14,13 @@ export class NoteListComponent {
 
   constructor(public noteService: NoteListService) {}
 
+    /**
+   * 
+   * 
+   * 
+   * 
+   * Frage Typisierung
+   */
   getList(): Note[] | any {
     if (this.status == 'notes') {
       if (this.favFilter == 'all') {
